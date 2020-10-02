@@ -2,7 +2,7 @@
 error_reporting(0);
 ini_set("memory_limit", '-1');
 include 'func.php';
-echo "Udemy Downloader | Code by sandroputraa\n\n";
+echo "Udemy Downloader | Source Code by sandroputraa\n\n";
 function get_list_download($id, $header_udemy, $name_dir, $quality_answers, $quality_answer)
 {
     echo "\n\n";
@@ -11,7 +11,7 @@ function get_list_download($id, $header_udemy, $name_dir, $quality_answers, $qua
         mkdir('video/'.$name_dir_fix.'');
         $dir_fix = 'video/'.$name_dir_fix.'/';
     }else{
-        echo "[!] Directory is exist\n";
+        echo "[!] Directory exist\n";
     }
     $get_list = curl(
         'https://www.udemy.com/api-2.0/courses/'.$id.'/subscriber-curriculum-items/?page_size=1400&fields[lecture]=title,object_index,is_published,sort_order,created,asset,supplementary_assets,is_free&fields[quiz]=title,object_index,is_published,sort_order,type&fields[practice]=title,object_index,is_published,sort_order&fields[chapter]=title,object_index,is_published,sort_order&fields[asset]=title,filename,asset_type,status,time_estimation,is_external&caching_intent=True',
@@ -31,7 +31,7 @@ function get_list_download($id, $header_udemy, $name_dir, $quality_answers, $qua
             null,
             $header_udemy
         );
-        if (strpos($get_link[2], 'Resource not found.')) {
+        if (strpos($get_link[2], 'Resource was not found.')) {
             echo "[!] Skip Not Video \n";
         } else {
             foreach (json_decode($get_link[2], true)['asset']['stream_urls']['Video'] as $key => $value) {
@@ -126,11 +126,11 @@ switch ($action) {
             for ($i=0; $i <$json_decode['count']; $i++) {
                 echo "[".$i."] Title : ".$json_decode['results'][$i]['title']."\n";
             }
-            $course_answers = getVarFromUser("[!] Select number course to download");
+            $course_answers = getVarFromUser("[!] Select number of course to download");
             $id_course = $json_decode['results'][$course_answers]['id'];
             $name_dir = $json_decode['results'][$course_answers]['title'];
             select:
-            echo "\n[!] Select Quality : 
+            echo "\n[!] Select The Quality of Video : 
             [0] 1080p
             [1] 720p
             [2] 480p\n\n";
@@ -143,7 +143,7 @@ switch ($action) {
             } elseif ($quality_answer == 2) {
                 $quality_answers = '480';
             }else{
-                echo "[x] Failed get quality";
+                echo "[x] Failed get a quality :(";
                 goto select;
             }
             $download_course = get_list_download($id_course, $header_udemy, $name_dir, $quality_answers, $quality_answer);
